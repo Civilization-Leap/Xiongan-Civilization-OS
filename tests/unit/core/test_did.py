@@ -1,6 +1,24 @@
 # Copyright 2024 ZhongXin Wang
 # Licensed under the Apache License, Version 2.0
+```python
+# Copyright 2024 ZhongXin Wang
+# Licensed under the Apache License, Version 2.0
 
+import sys
+import os
+
+# 添加项目根目录到Python路径
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../..'))
+
+import pytest
+
+# 直接导入需要的模块，不通过 __init__.py
+from src.core.did import DID
+from src.core.exceptions import DIDValidationError
+
+class TestDID:
+    # ... 保持原有测试代码不变 ...
+```
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../..'))
