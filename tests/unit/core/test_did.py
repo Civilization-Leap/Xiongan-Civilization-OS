@@ -1,10 +1,13 @@
-python
-# Copyright 2024 [王忠新]
+# Copyright 2024 ZhongXin Wang
 # Licensed under the Apache License, Version 2.0
 
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../..'))
+
 import pytest
-from core.did import DID
-from core.exceptions import DIDValidationError
+from src.core.did import DID
+from src.core.exceptions import DIDValidationError
 
 class TestDID:
     def test_create_did(self):
