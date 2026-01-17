@@ -1,0 +1,64 @@
+```python
+#!/usr/bin/env python3
+"""
+直接测试DID模块，不依赖pytest的导入系统
+"""
+
+import sys
+import os
+
+# 设置Python路径
+project_root = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(project_root, 'src'))
+
+def test_did_basics():
+    """测试DID基本功能"""
+    from core.did import DID
+    
+    print("测试1: 创建DID")
+    did1 = DID.create(did_type="resident")
+    assert did1.did.startswith("did:xca:resident:")
+    print(f"  ✓ 创建成功: {did1}")
+    
+    print("\n测试2: 解析DID")
+    test_str = "did:xca:organization:test_org"
+    did2 = DID.parse(test_str)
+    assert did2.did == test_str
+    print(f"  ✓ 解析成功: {did2}")
+    
+    print("\n测试3: 生成文档")
+    doc = did1.generate_document()
+    assert doc["id"] == did1.did
+    print(f"  ✓ 文档生成成功")
+    
+    print("\n测试4: 异常处理")
+    from core.exceptions import DIDValidationError
+    try:
+        DID.parse("invalid")
+        assert False, "应该抛出异常"
+    except DIDValidationError:
+        print(f"  ✓ 正确捕获异常")
+    
+    print("\n测试5: 相等性比较")
+    did3 = DID.parse("did:xca:device:same")
+    did4 = DID.parse("did:xca:device:same")
+    assert did3 == did4
+    print(f"  ✓ 相等性测试通过")
+    
+    return True
+
+if __name__ == "__main__":
+    print("🚀 Xiongan Civilization OS - 直接测试")
+    print("=" * 50)
+    
+    try:
+        success = test_did_basics()
+        if success:
+            print("\n" + "=" * 50)
+            print("🎉 所有测试通过！DID模块功能完整。")
+            print("\n可以开始构建CV账户系统了！")
+    except Exception as e:
+        print(f"\n❌ 测试失败: {type(e).__name__}: {e}")
+        import traceback
+        traceback.print_exc()
+```
