@@ -1,5 +1,5 @@
 python
-   # Copyright 2024 [替换为您的姓名或ID]
+   # Copyright 2024 [ZhongXinWang]
    # Licensed under the Apache License, Version 2.0
    
    """Custom exceptions for the Civilization OS."""
