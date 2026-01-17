@@ -30,5 +30,51 @@ did:xca:<类型>:<唯一标识符>
 · 方法: xca (Xiongan Civilization OS)
 · 类型: resident(居民), organization(组织), device(设备), service(服务)
 · 标识符: 32字符哈希值
+```markdown
+## 🧪 运行测试
+
+### 快速验证
+```bash
+# 运行简易验证脚本
+python run_tests.py
+
+# 运行完整测试
+pip install pytest
+python -m pytest tests/ -v
+```
+
+开发环境设置
+
+```bash
+# 安装开发依赖
+pip install -e ".[dev]"
+
+# 运行测试
+pytest
+```
+
+```
+
+## 📁 最终项目结构应包含
+
+```
+
+Xiongan-Civilization-OS/
+├── pyproject.toml          # 新增：项目配置文件
+├── run_tests.py           # 新增：验证脚本
+├── README.md
+├── LICENSE
+├── CONTRIBUTING.md
+├── src/
+│   └── core/
+│       ├── init.py
+│       ├── did.py
+│       └── exceptions.py
+└── tests/
+└── unit/
+└── core/
+└── test_did.py
+
+```
 ## License
   Licensed under the Apache License, Version 2.0. Copyright 2024 [ZhongXinWang].
