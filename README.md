@@ -53,28 +53,5 @@ pip install -e ".[dev]"
 pytest
 ```
 
-```
-
-## 📁 最终项目结构应包含
-
-```
-
-Xiongan-Civilization-OS/
-├── pyproject.toml          # 新增：项目配置文件
-├── run_tests.py           # 新增：验证脚本
-├── README.md
-├── LICENSE
-├── CONTRIBUTING.md
-├── src/
-│   └── core/
-│       ├── init.py
-│       ├── did.py
-│       └── exceptions.py
-└── tests/
-└── unit/
-└── core/
-└── test_did.py
-
-```
 ## License
   Licensed under the Apache License, Version 2.0. Copyright 2024 [ZhongXinWang].
