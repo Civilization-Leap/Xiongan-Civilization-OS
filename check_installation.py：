@@ -1,0 +1,30 @@
+```python
+#!/usr/bin/env python3
+"""
+验证Xiongan Civilization OS包安装
+"""
+
+try:
+    # 测试是否能导入包
+    import sys
+    sys.path.insert(0, '.')  # 添加当前目录到路径
+    
+    from src.core.did import DID
+    
+    print("✅ 包导入成功！")
+    print(f"版本: 0.1.0")
+    print(f"作者: ZhongXin Wang")
+    print(f"许可证: Apache-2.0")
+    
+    # 测试基本功能
+    did = DID.create(did_type="test")
+    print(f"✅ DID创建成功: {did}")
+    
+except ImportError as e:
+    print(f"❌ 导入失败: {e}")
+    print("\n可能原因:")
+    print("1. 缺少 src/__init__.py 文件")
+    print("2. Python路径问题")
+except Exception as e:
+    print(f"❌ 错误: {type(e).__name__}: {e}")
+```
