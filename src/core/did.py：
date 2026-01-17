@@ -1,0 +1,148 @@
+python
+# Copyright 2024 [ZongXinWang]
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Decentralized Identifier (DID) Core Module for Xiongan Civilization OS.
+
+This module implements the W3C DID Core specification, providing the foundational
+digital identity for residents and entities within the system.
+"""
+
+import re
+import hashlib
+import uuid
+from datetime import datetime
+from typing import Optional, Dict, Any
+from .exceptions import DIDValidationError
+
+class DID:
+    """
+    A Decentralized Identifier (DID) following the W3C DID Core specification.
+
+    Example DID: `did:xca:resident:abc123...`
+    """
+
+    # DID Method for Xiongan Civilization OS
+    METHOD = "xca"
+    DID_PATTERN = re.compile(r'^did:([a-z0-9]+):([a-z0-9]+):([a-zA-Z0-9._-]+)$')
+
+    def __init__(self, method_specific_id: str, did_type: str = "resident"):
+        """
+        Initialize a new DID.
+
+        :param method_specific_id: The unique identifier within the method.
+        :param did_type: The type of entity (resident, organization, device, etc.).
+        """
+        self.did_type = did_type
+        self.method_specific_id = method_specific_id
+        self._created = datetime.utcnow()
+        self._document: Optional[Dict[str, Any]] = None
+
+        # Validate components
+        if not did_type.isalnum():
+            raise DIDValidationError(f"DID type must be alphanumeric: {did_type}")
+        if not method_specific_id:
+            raise DIDValidationError("Method specific ID cannot be empty")
+
+        # Generate the full DID string
+        self._did_string = f"did:{self.METHOD}:{self.did_type}:{self.method_specific_id}"
+
+    @classmethod
+    def create(cls, did_type: str = "resident", seed: Optional[str] = None) -> 'DID':
+        """
+        Factory method to create a new DID with a cryptographically random unique ID.
+
+        :param did_type: Type of the DID subject.
+        :param seed: Optional seed for deterministic ID generation (for testing).
+        :return: A new DID instance.
+        """
+        if seed:
+            # Deterministic generation for testing
+            unique_id = hashlib.sha256(seed.encode()).hexdigest()[:32]
+        else:
+            # Cryptographically secure random generation for production
+            unique_id = hashlib.sha256(uuid.uuid4().bytes).hexdigest()[:32]
+
+        return cls(method_specific_id=unique_id, did_type=did_type)
+
+    @classmethod
+    def parse(cls, did_string: str) -> 'DID':
+        """
+        Parse a DID string into a DID object.
+
+        :param did_string: The full DID string (e.g., "did:xca:resident:abc123").
+        :return: A DID instance.
+        :raises DIDValidationError: If the DID string is invalid.
+        """
+        match = cls.DID_PATTERN.match(did_string)
+        if not match:
+            raise DIDValidationError(f"Invalid DID format: {did_string}")
+
+        method, did_type, method_specific_id = match.groups()
+
+        if method != cls.METHOD:
+            raise DIDValidationError(f"Unsupported DID method: {method}")
+
+        return cls(method_specific_id=method_specific_id, did_type=did_type)
+
+    @property
+    def did(self) -> str:
+        """Return the full DID string."""
+        return self._did_string
+
+    @property
+    def created(self) -> datetime:
+        """Return the creation timestamp of this DID."""
+        return self._created
+
+    def generate_document(self) -> Dict[str, Any]:
+        """
+        Generate a minimal DID Document as per W3C specification.
+
+        :return: A dictionary representing the DID Document.
+        """
+        doc = {
+            "@context": "https://www.w3.org/ns/did/v1",
+            "id": self.did,
+            "created": self._created.isoformat() + "Z",
+            "verificationMethod": [{
+                "id": f"{self.did}#keys-1",
+                "type": "EcdsaSecp256k1VerificationKey2019",
+                "controller": self.did,
+                "publicKeyMultibase": "zQ3s... (placeholder)"
+            }],
+            "authentication": [f"{self.did}#keys-1"],
+            "service": [{
+                "id": f"{self.did}#linked-domains",
+                "type": "LinkedDomains",
+                "serviceEndpoint": "https://xca.os/identity"
+            }]
+        }
+        self._document = doc
+        return doc
+
+    def __str__(self) -> str:
+        return self.did
+
+    def __repr__(self) -> str:
+        return f'<DID: {self.did}>'
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, DID):
+            return False
+        return self.did == other.did
+
+    def __hash__(self) -> int:
+        return hash(self.did)
