@@ -1,4 +1,3 @@
-`toml
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
@@ -6,12 +5,30 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "xiongan-civilization-os"
 version = "0.1.0"
-description = "Xiongan Civilization Leap Operating System"
+description = "Xiongan Civilization Leap Operating System - The digital foundation for civilization evolution"
 readme = "README.md"
 license = {file = "LICENSE"}
 authors = [
-    {name = "Your Name", email = "your-email@example.com"}
+    {name = "ZhongXin Wang"}
 ]
+maintainers = [
+    {name = "ZhongXin Wang"}
+]
+
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Sociology",
+]
+
+keywords = ["xiongan", "civilization", "did", "decentralized-identity", "contribution-system"]
 
 dependencies = []
 
@@ -23,10 +40,17 @@ dev = [
 
 [tool.setuptools.packages.find]
 where = ["src"]
+include = ["*"]
+exclude = ["tests*", "docs*"]
 
-[tool.setuptools.package-dir]
-"xca" = "src"
+[tool.setuptools]
+package-dir = {"" = "src"}
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+addopts = "-v"
+
+[project.urls]
+Homepage = "https://github.com/Civilization-Leap/Xiongan-Civilization-OS"
+"Bug Tracker" = "https://github.com/Civilization-Leap/Xiongan-Civilization-OS/issues"
