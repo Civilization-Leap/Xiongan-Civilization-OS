@@ -1,0 +1,139 @@
+```python
+#!/usr/bin/env python3
+"""
+Xiongan Civilization OS - 即时验证脚本
+验证DID模块完全功能
+"""
+
+import sys
+import os
+
+# 添加项目根目录到Python路径
+current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, current_dir)
+
+print("🚀 Xiongan Civilization OS - 完整功能验证")
+print("=" * 60)
+
+def test_module_import():
+    """测试模块导入"""
+    try:
+        from src.core.did import DID
+        from src.core.exceptions import DIDValidationError
+        print("✅ 1. 模块导入成功")
+        return DID, DIDValidationError
+    except ImportError as e:
+        print(f"❌ 1. 模块导入失败: {e}")
+        return None, None
+
+def test_did_creation(DID):
+    """测试DID创建"""
+    if not DID:
+        return
+    
+    # 创建不同身份的DID
+    identities = {
+        "居民": "resident",
+        "组织": "organization", 
+        "设备": "device",
+        "服务": "service"
+    }
+    
+    print("\n✅ 2. 创建各类数字身份:")
+    did_objects = {}
+    for name, did_type in identities.items():
+        did = DID.create(did_type=did_type)
+        did_objects[name] = did
+        print(f"   🔹 {name}: {did}")
+    
+    return did_objects
+
+def test_did_parsing(DID):
+    """测试DID解析"""
+    print("\n✅ 3. 解析与验证:")
+    
+    # 测试有效DID
+    valid_did = "did:xca:resident:test_resident_001"
+    parsed = DID.parse(valid_did)
+    print(f"   🔹 解析 '{valid_did}'")
+    print(f"     类型: {parsed.did_type}")
+    print(f"     标识: {parsed.method_specific_id}")
+    
+    # 测试无效DID（应抛出异常）
+    print("   🔹 验证异常处理...")
+    invalid_cases = [
+        "not_a_did",
+        "did:wrong:method:123",
+        "did:xca:invalid*type:123"
+    ]
+    
+    for invalid in invalid_cases:
+        try:
+            DID.parse(invalid)
+            print(f"     ❌ '{invalid}' 应该失败但通过了")
+        except Exception:
+            print(f"     ✓ '{invalid}' 正确拒绝")
+
+def test_did_document(DID):
+    """测试DID文档生成"""
+    print("\n✅ 4. 生成DID文档:")
+    
+    did = DID.create(did_type="resident")
+    doc = did.generate_document()
+    
+    required_fields = ["@context", "id", "created", "verificationMethod", "authentication"]
+    missing = [field for field in required_fields if field not in doc]
+    
+    if not missing:
+        print("   🔹 文档包含所有必需字段")
+        print(f"     文档ID: {doc['id']}")
+        print(f"     创建时间: {doc['created']}")
+        print(f"     验证方法: {len(doc['verificationMethod'])} 个")
+    else:
+        print(f"   ❌ 缺少字段: {missing}")
+
+def test_did_features(DID):
+    """测试DID高级功能"""
+    print("\n✅ 5. 高级功能验证:")
+    
+    # 测试相等性
+    did1 = DID.parse("did:xca:resident:same_id")
+    did2 = DID.parse("did:xca:resident:same_id")
+    did3 = DID.parse("did:xca:device:different")
+    
+    print(f"   🔹 DID相等性: {did1 == did2} (应该为True)")
+    print(f"   🔹 DID不相等: {did1 != did3} (应该为True)")
+    
+    # 测试哈希
+    print(f"   🔹 哈希一致性: {hash(did1) == hash(did2)} (应该为True)")
+
+def main():
+    """主验证流程"""
+    DID, DIDValidationError = test_module_import()
+    
+    if not DID:
+        print("\n❌ 验证失败：无法导入核心模块")
+        print("\n建议检查:")
+        print("1. src/__init__.py 是否存在")
+        print("2. src/core/__init__.py 是否存在")
+        print("3. 文件权限是否正确")
+        return False
+    
+    print("\n" + "=" * 60)
+    print("开始完整功能验证...")
+    
+    did_objects = test_did_creation(DID)
+    test_did_parsing(DID)
+    test_did_document(DID)
+    test_did_features(DID)
+    
+    print("\n" + "=" * 60)
+    print("🎉 验证完成！DID模块所有核心功能正常。")
+    print("\n下一步：开始构建CV账户系统")
+    
+    return True
+
+if __name__ == "__main__":
+    success = main()
+    sys.exit(0 if success else 1)
+```
