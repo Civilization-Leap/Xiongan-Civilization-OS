@@ -1,4 +1,4 @@
-`python
+
    #!/usr/bin/env python3
    # 简易验证脚本 - 测试DID核心功能
    
