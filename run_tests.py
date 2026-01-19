@@ -1,4 +1,4 @@
-python
+
 #!/usr/bin/env python3
 """
 简易测试运行脚本 - 用于验证DID模块功能
