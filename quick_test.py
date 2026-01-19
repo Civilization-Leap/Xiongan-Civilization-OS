@@ -1,4 +1,4 @@
-```python
+
 #!/usr/bin/env python3
 """
 快速验证DID模块功能
@@ -43,4 +43,4 @@ except ImportError as e:
     
 except Exception as e:
     print(f"❌ 错误: {type(e).__name__}: {e}")
-```
+
