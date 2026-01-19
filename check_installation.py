@@ -1,4 +1,4 @@
-```python
+
 #!/usr/bin/env python3
 """
 验证Xiongan Civilization OS包安装
@@ -27,4 +27,4 @@ except ImportError as e:
     print("2. Python路径问题")
 except Exception as e:
     print(f"❌ 错误: {type(e).__name__}: {e}")
-```
+
