@@ -1,4 +1,4 @@
-``python
+
 #!/usr/bin/env python3
 """
 Xiongan Civilization OS - DID模块演示
@@ -69,4 +69,4 @@ except ImportError as e:
     print("\n请先创建 src/__init__.py 文件")
 except Exception as e:
     print(f"❌ 运行时错误: {type(e).__name__}: {e}")
-```
+
