@@ -1,4 +1,4 @@
-```python
+
 #!/usr/bin/env python3
 """
 直接测试DID模块，不依赖pytest的导入系统
@@ -61,4 +61,4 @@ if __name__ == "__main__":
         print(f"\n❌ 测试失败: {type(e).__name__}: {e}")
         import traceback
         traceback.print_exc()
-```
+
