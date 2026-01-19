@@ -1,4 +1,4 @@
-```python
+
 # Copyright 2024 ZhongXin Wang
 # Licensed under the Apache License, Version 2.0
 
@@ -19,4 +19,4 @@ __all__ = ["core"]
 
 # 注意：这里不再导入任何模块，避免循环导入
 # 实际使用中应该直接从子模块导入，例如：from src.core.did import DID
-```
+
