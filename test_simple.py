@@ -14,7 +14,7 @@ print("=" * 40)
 
 try:
     # 直接导入did模块
-   from src.core.did import DID
+  from src.core.did import DID
     
     print("✅ 直接导入成功")
     
